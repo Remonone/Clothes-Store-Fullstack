@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./pages/Home/Home";
+import Page from "./pages/static/Page";
 
 function App() {
-  const [grade, setGrade] = useState<number>(67)
+  const router = createBrowserRouter([
+    {
+      path: '',
+      element: <Page element={<Home/>}/>
+    }
+  ])
   return (
-    <div>React Application</div>
+    <div>
+      <RouterProvider router={router}/>
+    </div>
   );
 }
 
