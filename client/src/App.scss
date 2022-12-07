@@ -4,10 +4,10 @@
     box-sizing: border-box;
 }
 
-p, span{
-    font-size: 20px;
+p, span, button, input{
+    font-size: 18px;
 }
 
-body{
-    
+body, button, input{
+    font-family: 'Poppins';
 }

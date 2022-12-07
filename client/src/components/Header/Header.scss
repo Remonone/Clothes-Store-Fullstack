@@ -1,0 +1,11 @@
+@import '../../utils/colors.scss';
+.header{
+    &-upper{
+        border-bottom: 1px solid $border;
+    }
+    .logo{
+        &-text{
+            font-weight: 700;
+        }
+    }
+}

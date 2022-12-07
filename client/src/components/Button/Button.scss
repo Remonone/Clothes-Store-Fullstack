@@ -3,8 +3,11 @@
 .btn{
     background: transparent;
     border: 0px;
-    padding: 17px 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
     &-filled{
+        padding: 17px 1rem;
         position: relative;
         border-radius: 5px;
         overflow: hidden;
@@ -40,6 +43,9 @@
                 transition: all 550ms cubic-bezier(0.19, 1, 0.22, 1);
               }
         }
+    }
+    &-empty{
+        cursor: pointer;
     }
     
 }

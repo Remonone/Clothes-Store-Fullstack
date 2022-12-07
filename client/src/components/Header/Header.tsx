@@ -4,6 +4,12 @@ import { useAppDispatch } from '../../redux/hooks'
 import { switchLanguage } from '../../redux/reducers/SettingsReducer'
 import Button from '../Button/Button'
 import Select from '../Select/Select'
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
+
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import CartIcon from '../CartIcon/CartIcon'
+
+import './Header.scss'
 
 const Header = () => {
   const dispatcher = useAppDispatch()
@@ -19,13 +25,24 @@ const Header = () => {
                 <Select values={['EN', 'RU', 'UA']} onChangeAction={changeLanguage}/>
                 <Select values={['USD', 'EUR']} onChangeAction={changeCurrency}/>
               </Grid>
-              <Grid item md={3}>
-                <Button variant='filled'>Test Button</Button>
+              <Grid item md={4} display='flex' gap={4}>
+                <Button variant='empty' preIcon={<PermIdentityOutlinedIcon/>}>My Profile</Button>
+                <CartIcon/>
+                <Button variant="empty"><SearchOutlinedIcon/></Button>
               </Grid>
             </Grid>
           </Container>
         </div>
-        <div className="header-lower"></div>
+        <div className="header-lower">
+          <Container>
+            <Grid container py={2}>
+              <Grid item md={2} className='logo' display='flex' alignItems='center' gap={1}>
+                <img src={process.env.PUBLIC_URL + '/Icon.svg'} alt="" />
+                <p className='logo-text'>E-Comm</p>
+              </Grid>
+            </Grid>
+          </Container>
+        </div>
       </div>
     </header>
   )

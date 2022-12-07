@@ -38,6 +38,9 @@
         transform-origin: top;
         span{
             cursor: pointer;
+            &:hover{
+                text-decoration: underline;
+            }
         }
     }
 }
