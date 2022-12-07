@@ -2,6 +2,7 @@ import { Container, Grid } from '@mui/material'
 import React from 'react'
 import { useAppDispatch } from '../../redux/hooks'
 import { switchLanguage } from '../../redux/reducers/SettingsReducer'
+import Button from '../Button/Button'
 import Select from '../Select/Select'
 
 const Header = () => {
@@ -13,12 +14,13 @@ const Header = () => {
       <div className="header">
         <div className="header-upper">
           <Container>
-            <Grid>
-              <Grid item md={1}>
+            <Grid container pt={2} pb={1} display='flex' alignItems='center' justifyContent='space-between'>
+              <Grid item md={2} display='flex' justifyContent='flex-start' gap={1} alignItems={'flex-start'}>
                 <Select values={['EN', 'RU', 'UA']} onChangeAction={changeLanguage}/>
+                <Select values={['USD', 'EUR']} onChangeAction={changeCurrency}/>
               </Grid>
               <Grid item md={3}>
-                <Select values={['USD', 'EUR']} onChangeAction={changeCurrency}/>
+                <Button variant='filled'>Test Button</Button>
               </Grid>
             </Grid>
           </Container>
