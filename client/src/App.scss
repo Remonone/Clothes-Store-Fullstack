@@ -11,3 +11,21 @@ p, span, button, input{
 body, button, input{
     font-family: 'Poppins';
 }
+.page{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    main{
+        flex: 1;
+    }
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    &-text{
+        font-weight: 700;
+    }
+}

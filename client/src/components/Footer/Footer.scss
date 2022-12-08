@@ -1,0 +1,27 @@
+@import '../../utils/colors.scss';
+.footer{
+    padding-top: 150px;
+    background: $primary-light;
+    padding-bottom: 50px;
+    &__title{
+        font-size: 18px;
+        font-weight: 500;
+        
+    }
+    &__descr{
+        padding-top: 20px;
+        font-size: 12px;
+        max-width: 60%;
+    }
+    &-social{
+        padding-top: 25px;
+        display: flex;
+        list-style-type: none;
+        gap: 40px;
+    }
+    &-lower{
+        margin-top: 68px;
+        border-top: 1px solid $border;
+        padding-top: 34px;
+    }
+}

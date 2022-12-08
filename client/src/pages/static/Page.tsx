@@ -4,9 +4,11 @@ import Header from '../../components/Header/Header'
 
 const Page = (props: {element: React.ReactElement}) => {
   return (
-    <div>
+    <div className={'page'}>
         <Header/>
-        {props.element}
+        <main>
+          {props.element}
+        </main>
         <Footer/>
     </div>
   )

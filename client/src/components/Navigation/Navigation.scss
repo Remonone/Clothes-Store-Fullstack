@@ -1,0 +1,18 @@
+@import '../../utils/colors.scss';
+.navigation{
+    ul{
+        list-style-type: none;
+        display: flex;
+        gap: 50px;
+        li a{
+            font-size: 22px;
+            font-weight: 500;
+            color: $text;
+            text-decoration: none;
+            text-transform: uppercase;
+            &.active{
+                color: $primary;
+            }
+        }
+    }
+}
