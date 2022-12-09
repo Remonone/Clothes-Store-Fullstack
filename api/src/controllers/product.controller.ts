@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
-import Product from '@api/models/Product'
-import productService from '@api/services/product.service'
-import { BadRequestError } from '@api/helpers/apiError'
+import Product from '../models/Product'
+import productService from '../services/product.service'
+import { BadRequestError } from '../helpers/apiError'
 
 // POST -> /products/
 export const createProduct = async (

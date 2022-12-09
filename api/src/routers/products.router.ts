@@ -7,7 +7,7 @@ import {
   filterByCategory,
   updateProduct,
   deleteProduct,
-} from '@api/controllers/product.controller'
+} from '../controllers/product.controller'
 
 const router = Router()
 

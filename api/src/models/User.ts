@@ -6,9 +6,9 @@ interface CartItem {
 }
 
 export type UserDocument = Document & {
-  _id: ObjectId
   username: string
   email: string
+  password: string
   avatar: string
   cart: CartItem[]
 }
@@ -26,15 +26,15 @@ const cartSchema = new mongoose.Schema({
 })
 
 const userSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-    index: true,
-  },
   username: {
     type: String,
     required: true,
   },
   email: {
+    type: String,
+    required: true,
+  },
+  password: {
     type: String,
     required: true,
   },

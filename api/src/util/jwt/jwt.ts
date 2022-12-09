@@ -2,7 +2,7 @@ import {
   BadRequestError,
   InternalServerError,
   UnauthorizedError,
-} from '@api/helpers/apiError'
+} from '../../helpers/apiError'
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../secrets'
 
