@@ -3,9 +3,8 @@ import User from '../models/User'
 import userService from '../services/user.service'
 import bcrypt from 'bcrypt'
 import { Request, Response, NextFunction } from 'express'
-import Avatar from 'avatar-builder'
-import fs from 'fs'
 import { AWS_BUCKET, AWS_REGION } from '../util/secrets'
+import { getData, getToken } from '../util/jwt/jwt'
 
 // GET -> /users/:id
 export const getUser = async (
@@ -31,25 +30,105 @@ export const createUser = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { username, email, password } = req.body
-  const encryptedPass = bcrypt.hashSync(password, 10)
-  const user = new User({
-    username,
-    email,
-    password: encryptedPass,
-    avatar: `https://${AWS_BUCKET}.s3.${AWS_REGION}.amazonaws.com/images/${username}.png`,
-    cart: [],
-  })
-  const avatar = Avatar.triangleBuilder(256)
-  await avatar.create(username).then((buffer) => {
-    const createdUser = userService.create(user, buffer)
+  try {
+    const { username, email, password } = req.body
+    const encryptedPass = bcrypt.hashSync(password, 10)
+    const user = new User({
+      username,
+      email,
+      password: encryptedPass,
+      avatar: `https://${AWS_BUCKET}.s3.${AWS_REGION}.amazonaws.com/images/${username}.png`,
+      cart: [],
+    })
+    const createdUser = await userService.create(user)
     return res.json(createdUser)
-  })
+  } catch (e) {
+    if (e instanceof Error && e.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', 400, e))
+    } else {
+      next(e)
+    }
+  }
 }
+// GET -> /users/login
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { email, password } = req.body
+    const user = await userService.loginUser(email, password)
+    const token = getToken({ id: user.id, email: user.email })
+    return token
+  } catch (e) {
+    if (e instanceof Error && e.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', 400, e))
+    } else {
+      next(e)
+    }
+  }
+}
+
 // PUT -> /users/avatar
+export const avatar = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { webToken } = req.headers
+    const avatar: Buffer = req.body
+    const data = getData(webToken as string)
+    const user = userService.editAvatar(data.id, avatar)
+    return res.status(200).json(user)
+  } catch (e) {
+    if (e instanceof Error && e.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', 400, e))
+    } else {
+      next(e)
+    }
+  }
+}
 // PUT -> /users/password
-// PUT -> /users/username
-// DELETE -> /users/:id
+export const changePass = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { webToken, newPassword } = req.body
+    const data = getData(webToken)
+    const user = await userService.changePassword(data.id, newPassword)
+    return res.status(200).json(user)
+  } catch (e) {
+    if (e instanceof Error && e.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', 400, e))
+    } else {
+      next(e)
+    }
+  }
+}
+// DELETE -> /users
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { webToken } = req.body
+    const data = getData(webToken)
+    const user = userService.deleteUser(data.id)
+    return user
+  } catch (e) {
+    if (e instanceof Error && e.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', 400, e))
+    } else {
+      next(e)
+    }
+  }
+}
+
 // GET -> /users/profile
 export const profile = async (
   req: Request,
@@ -58,7 +137,7 @@ export const profile = async (
 ) => {
   try {
     const { webToken } = req.body
-    const user = userService.profile(webToken)
+    const user = await userService.profile(webToken)
     return res.json(user)
   } catch (e) {
     if (e instanceof Error && e.name == 'ValidationError') {

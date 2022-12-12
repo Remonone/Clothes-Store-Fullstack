@@ -1,14 +1,9 @@
-import { Request, Response, NextFunction } from 'express'
+import { ErrorRequestHandler } from 'express'
 
 import ApiError from '../helpers/apiError'
 import logger from '../util/logger'
 
-export default function (
-  error: ApiError|Error,
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   if (error instanceof ApiError) {
     if (error.source) {
       logger.error(error.source)
@@ -25,5 +20,6 @@ export default function (
       message: error.message,
     })
   }
-  
 }
+
+export default errorHandler

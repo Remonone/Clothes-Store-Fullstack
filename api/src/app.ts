@@ -5,10 +5,10 @@ import session from 'express-session'
 import cookieParser from 'cookie-parser'
 import passport from 'passport'
 
-import apiErrorHandler from './middlewares/apiErrorHandler'
 import apiContentType from './middlewares/apiContentType'
 import productRouter from './routers/products.router'
 import userRouter from './routers/user.router'
+import errorHandler from './middlewares/apiErrorHandler'
 
 dotenv.config({ path: '.env' })
 const app = express()
@@ -45,6 +45,6 @@ app.use('/api/v1/products', productRouter)
 app.use('/api/v1/users', userRouter)
 
 // Custom API error handler
-app.use(apiErrorHandler)
+app.use(errorHandler)
 
 export default app

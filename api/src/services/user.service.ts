@@ -1,58 +1,65 @@
+import Avatar from 'avatar-builder'
 import awsS3Service from '../aws/aws.s3.service'
-import { NotFoundError } from '../helpers/apiError'
+import {
+  ForbiddenError,
+  NotFoundError,
+  UnauthorizedError,
+} from '../helpers/apiError'
 import User, { UserDocument } from '../models/User'
 import { getData } from '../util/jwt/jwt'
-import { AWS_BUCKET } from '../util/secrets'
+import bcrypt from 'bcrypt'
 
-const create = async (
-  user: UserDocument,
-  avatar: Buffer
-): Promise<UserDocument> => {
-  awsS3Service.aws_put({
-    Bucket: AWS_BUCKET,
-    Key: `images/${user.username}.png`,
-    Body: avatar,
+const create = async (user: UserDocument): Promise<UserDocument | null> => {
+  const possibleUser = await User.find({ email: user.email })
+  if (possibleUser)
+    throw new ForbiddenError('User with this email already exist')
+  const createdUser = await user.save()
+
+  const avatar = Avatar.triangleBuilder(256)
+  avatar.create(user.username).then((buffer) => {
+    awsS3Service.aws_put({
+      key: `users/${createdUser._id}/images/avatar.png`,
+      body: buffer,
+    })
   })
-  return user.save()
+
+  return createdUser
 }
 
-const getUserById = async (_id: string): Promise<UserDocument> => {
-  const user = await User.findById(_id)
-  if (!user) throw new NotFoundError(`User ${_id} was not found`)
+const loginUser = async (email: string, password: string) => {
+  const user = await User.findOne({ email })
+  if (!user) throw new NotFoundError('User with that email doesn\'t exist')
+  if (!bcrypt.compareSync(password, user.password))
+    throw new UnauthorizedError('Authentication error')
   return user
+}
+
+const getUserById = async (id: string) => {
+  const user = await User.findById(id)
+  if (!user) throw new NotFoundError(`User ${id} was not found`)
+  const userToReturn = {
+    username: user.username,
+    avatar: user.avatar,
+  }
+  return userToReturn
 }
 
 const editAvatar = async (id: string, newAvatar: Buffer) => {
   const user = await User.findById(id)
   if (!user) throw new NotFoundError(`User ${id} was not found`)
-  awsS3Service.aws_delete({
-    Bucket: AWS_BUCKET,
-    Key: `images/${user.username}`,
-  })
+  awsS3Service.aws_delete(`users/${user.id}/images/avatar.png`)
   awsS3Service.aws_put({
-    Bucket: AWS_BUCKET,
-    Key: `images/${user.username}`,
-    Body: newAvatar,
+    key: `users/${id}/images/avatar.png`,
+    body: newAvatar,
   })
   return user
 }
 
 const changePassword = async (id: string, newPassword: string) => {
+  const encryptedPass = bcrypt.hashSync(newPassword, 10)
   const user = await User.findByIdAndUpdate(
     id,
-    { password: newPassword },
-    {
-      new: true,
-    }
-  )
-  if (!user) throw new NotFoundError(`User ${id} was not found`)
-  return user
-}
-
-const changeUsername = async (id: string, newUsername: string) => {
-  const user = await User.findByIdAndUpdate(
-    id,
-    { username: newUsername },
+    { password: encryptedPass },
     {
       new: true,
     }
@@ -64,12 +71,13 @@ const changeUsername = async (id: string, newUsername: string) => {
 const deleteUser = async (id: string): Promise<UserDocument | null> => {
   const user = await User.findByIdAndDelete(id)
   if (!user) throw new NotFoundError(`User ${id} was not found`)
+  awsS3Service.aws_delete(`users/${id}`)
   return user
 }
 
-const profile = async (webToken: string): Promise<UserDocument> => {
+const profile = async (webToken: string) => {
   const data = getData(webToken)
-  const user = await getUserById(data.id)
+  const user = await User.findById(data.id)
   return user
 }
 
@@ -78,7 +86,7 @@ export default {
   getUserById,
   editAvatar,
   changePassword,
-  changeUsername,
   deleteUser,
   profile,
+  loginUser,
 }
