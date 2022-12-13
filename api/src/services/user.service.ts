@@ -78,6 +78,7 @@ const deleteUser = async (id: string): Promise<UserDocument | null> => {
 const profile = async (webToken: string) => {
   const data = getData(webToken)
   const user = await User.findById(data.id)
+  if (!user) throw new UnauthorizedError('User not authenticated')
   return user
 }
 

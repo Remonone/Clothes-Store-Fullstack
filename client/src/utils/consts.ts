@@ -15,11 +15,6 @@ export const links = [
         path: '/sneakers'
     },
     {
-        id: 'sneakers',
-        value: "Sneakers",
-        path: '/sneakers'
-    },
-    {
         id: 'belt',
         value: "Belt",
         path: '/belt'

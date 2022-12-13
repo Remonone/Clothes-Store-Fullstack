@@ -10,13 +10,12 @@ import {
 import { Router } from 'express'
 
 const userRouter = Router()
-
-userRouter.get('/:id', getUser)
 userRouter.get('/profile', profile)
-userRouter.post('', createUser)
-userRouter.get('/login', login)
+userRouter.post('/login', login)
+userRouter.get('/:id', getUser)
 userRouter.put('/avatar', avatar)
 userRouter.put('/password', changePass)
-userRouter.post('', deleteUser)
+userRouter.post('', createUser)
+userRouter.delete('', deleteUser)
 
 export default userRouter

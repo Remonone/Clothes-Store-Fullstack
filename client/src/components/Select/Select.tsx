@@ -20,7 +20,7 @@ const Select = (props: {label?: string, values: string[], onChangeAction: Callab
         </div>
         <div className="select-hidden">
             {props.values.map(item => {
-                if(item === value) return (<></>)
+                if(item === value) return (<div key={'empty'}></div>)
                 return (<span onClick={() => changeValue(item)} className='select-item' key={item}>{item}</span>)
             })}
         </div>

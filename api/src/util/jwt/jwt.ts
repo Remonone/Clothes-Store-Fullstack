@@ -23,6 +23,9 @@ export const getData = (token: string) => {
     if (e instanceof jwt.NotBeforeError) {
       throw new UnauthorizedError('Not valid token', 403, e)
     }
+    if (e instanceof jwt.JsonWebTokenError) {
+      throw new BadRequestError('Not valid token', 400)
+    }
     throw new InternalServerError('Internal Error', 500, e)
   }
 }

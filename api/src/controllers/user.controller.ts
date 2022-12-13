@@ -50,7 +50,7 @@ export const createUser = async (
     }
   }
 }
-// GET -> /users/login
+// POST -> /users/login
 export const login = async (
   req: Request,
   res: Response,
@@ -59,8 +59,8 @@ export const login = async (
   try {
     const { email, password } = req.body
     const user = await userService.loginUser(email, password)
-    const token = getToken({ id: user.id, email: user.email })
-    return token
+    const token = getToken({ id: user._id, email: user.email })
+    return res.status(200).json({ webToken: token })
   } catch (e) {
     if (e instanceof Error && e.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', 400, e))
@@ -136,8 +136,8 @@ export const profile = async (
   next: NextFunction
 ) => {
   try {
-    const { webToken } = req.body
-    const user = await userService.profile(webToken)
+    const webToken = req.headers.authorization
+    const user = await userService.profile(webToken as string)
     return res.json(user)
   } catch (e) {
     if (e instanceof Error && e.name == 'ValidationError') {

@@ -1,0 +1,35 @@
+@import '../../utils/colors.scss';
+
+.input-box{
+    display: flex;
+    gap: 12px;
+    border-radius: 5px;
+    border: 1px solid #EBF0FF;
+    padding: 14px 18px;
+    cursor: text;
+    &.error{
+        border: 1px solid #ee0000;
+        svg{
+            fill: #ee0000;
+        }
+        input{
+            color: #ee0000;
+            &::placeholder{
+                color: #ee0000;
+            }
+        }
+    }
+    svg{
+        fill: $text-light;
+    }
+    input{
+        font-size: 16px;
+        color: $text-light;
+        border: 0;
+        outline: none;
+        width: 100%;
+        &::placeholder{
+            color: $text-light;
+        }
+    }
+}

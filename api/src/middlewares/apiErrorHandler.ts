@@ -6,7 +6,7 @@ import logger from '../util/logger'
 const errorHandler: ErrorRequestHandler = (error, req, res, next) => {
   if (error instanceof ApiError) {
     if (error.source) {
-      logger.error(error.source)
+      logger.error(`[${error.name}] ${error.source}`)
     }
     return res.status(error.statusCode).json({
       status: 'error',
