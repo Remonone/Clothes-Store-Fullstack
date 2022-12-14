@@ -1,6 +1,6 @@
 import { Container, Grid } from '@mui/material'
 import React from 'react'
-import { useAppDispatch } from '../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { switchLanguage } from '../../redux/reducers/SettingsReducer'
 import Button from '../Button/Button'
 import Select from '../Select/Select'
@@ -10,13 +10,15 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import CartIcon from '../CartIcon/CartIcon'
 
 import './Header.scss'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Navigation from '../Navigation/Navigation'
 
 const Header = () => {
   const dispatcher = useAppDispatch()
+  const navigation = useNavigate()
   const changeLanguage = (language: string) => dispatcher(switchLanguage(language))
   const changeCurrency = (currency: string) => dispatcher(switchLanguage(currency))
+  const user = useAppSelector(state => state.accountReducer)
   return (
     <header>
       <div className="header">
@@ -28,7 +30,7 @@ const Header = () => {
                 <Select values={['USD', 'EUR']} onChangeAction={changeCurrency}/>
               </div>
               <div className='header-upper-control'>
-                <Button variant='empty' preIcon={<PermIdentityOutlinedIcon/>}>My Profile</Button>
+                <Button onClick={()=> navigation('/profile')} variant='empty' preIcon={!!user.avatar ? <img src={user.avatar}/> : <PermIdentityOutlinedIcon/>}>My Profile</Button>
                 <CartIcon/>
                 <Button variant="empty"><SearchOutlinedIcon/></Button>
               </div>

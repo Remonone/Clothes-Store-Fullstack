@@ -1,5 +1,5 @@
-import { debounce } from '@mui/material';
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { accountReducer, authentication } from './reducers/AccountReducer';
 import { authReducer } from './reducers/AuthReducer';
 import { settingsReducer } from './reducers/SettingsReducer';
 
@@ -21,20 +21,20 @@ export const saveState = (store:any) => {
     localStorage.setItem(KEY, serializedState);
   } catch (e) { }
 }
-
 export const store = configureStore({
   reducer: {
-    settingsReducer,
-    authReducer
+    settings: settingsReducer,
+    auth: authReducer,
+    accountReducer
   },
   preloadedState: loadState()
 });
 
 store.subscribe(
-  debounce(() => {
+  function() {
     const state = store.getState()
-    saveState({authReducer: state.authReducer, settingsReducer: state.settingsReducer})
-  }, 1000)
+    saveState({auth: state.auth, settings: state.settings})
+  }
 )
 
 export type AppDispatch = typeof store.dispatch;

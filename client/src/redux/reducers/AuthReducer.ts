@@ -1,13 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { User } from "../../types/types";
 
-const initialState: User = {
-    _id: '',
-    username: '',
-    email: '',
-    avatar: '',
-    cart: []
+const initialState = {
+    token: '',
+    isAuthenticated: false
 }
 
 interface ILoginCredentials {
@@ -20,20 +16,22 @@ export const login = createAsyncThunk('login', async (loginData:ILoginCredential
     const response = await axios.post('http://localhost:8000/api/v1/users/login', {
         email, password
     })
-    const user = await axios.get('http://localhost:8000/api/v1/users/profile', {
-        headers: {authorization: response.data.webToken}
-    })
-    return user.data as User
+    return response.data.webToken as string
 })
 
 const auth = createSlice({
     name: 'authReducer',
     initialState,
-    reducers: {},
+    reducers: {
+        logout: state => ({token: '', isAuthenticated: false}) 
+    },
     extraReducers: (build) => {
         build
             .addCase(login.fulfilled, (state, action) => {
-                return action.payload;
+                return {
+                    token: action.payload,
+                    isAuthenticated: true
+                };
             })
     },
 })

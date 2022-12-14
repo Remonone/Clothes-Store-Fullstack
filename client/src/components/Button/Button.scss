@@ -7,6 +7,11 @@
     align-items: center;
     justify-content: center;
     gap: 5px;
+    img, svg{
+        width: 25px;
+        height: 25px;
+        border-radius: 10px;
+    }
     &-filled{
         padding: 17px 1rem;
         position: relative;

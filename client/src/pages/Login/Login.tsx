@@ -10,8 +10,9 @@ import './Login.scss'
 import Button from '../../components/Button/Button'
 import { useForm } from 'react-hook-form'
 import { loginSchema } from '../../schema/schemas'
-import { useAppDispatch } from '../../redux/hooks'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { login } from '../../redux/reducers/AuthReducer'
+import { useNavigate } from 'react-router-dom'
 
 interface ILoginCredentials{
     email: string
@@ -22,22 +23,25 @@ interface ILoginCredentials{
 const Login = () => {
     const [open, setOpen] = useState(false)
     const [error, setError] = useState<React.ReactNode>(<></>)
+    const auth = useAppSelector(state => state.auth)
     const dispatch = useAppDispatch()
+    const navigation = useNavigate()
     const submit = (data: ILoginCredentials) => {
         dispatch(login(data))
     }
     const {register, handleSubmit, formState: { errors }} = useForm<ILoginCredentials>({
         resolver: yupResolver(loginSchema)
     })
-    
     useEffect(() => {
+        if(auth.isAuthenticated) navigation('/')
+    }, [auth])
+    useEffect(() => {
+        if(!(errors.email || errors.password)) return
         let errorLog: React.ReactNode = <div>
             {Object.values(errors).map(item => {
                 return (<p>{item.message}</p>)
             })}
         </div>
-        
-        if(!(errors.email || errors.password)) return
         setError(errorLog)
         setOpen(true)
     }, [errors])

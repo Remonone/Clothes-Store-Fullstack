@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { useAppSelector } from '../../redux/hooks'
 const Home = () => {
-  const [user, setUser] = useState<any>()
-  
+  const user = useAppSelector(state => state.accountReducer)
+
   return (
     <div>
         {
