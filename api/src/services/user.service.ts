@@ -8,9 +8,10 @@ import {
 import User, { UserDocument } from '../models/User'
 import { getData } from '../util/jwt/jwt'
 import bcrypt from 'bcrypt'
+import { AWS_BUCKET, AWS_REGION } from '../util/secrets'
 
 const create = async (user: UserDocument): Promise<UserDocument | null> => {
-  const possibleUser = await User.find({ email: user.email })
+  const possibleUser = await User.findOne({ email: user.email })
   if (possibleUser)
     throw new ForbiddenError('User with this email already exist')
   const createdUser = await user.save()
@@ -22,8 +23,10 @@ const create = async (user: UserDocument): Promise<UserDocument | null> => {
       body: buffer,
     })
   })
-
-  return createdUser
+  const userWithAvatar = await User.findByIdAndUpdate(createdUser._id, {
+    avatar: `https://${AWS_BUCKET}.s3.${AWS_REGION}.amazonaws.com/users/${createdUser._id}/images/avatar.png`,
+  })
+  return userWithAvatar
 }
 
 const loginUser = async (email: string, password: string) => {

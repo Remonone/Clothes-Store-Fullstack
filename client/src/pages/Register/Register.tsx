@@ -11,7 +11,9 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {register as registerAccount} from '../../redux/reducers/AuthReducer'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+import './Register.scss'
 
 const Register = () => {
     const dispatch =useAppDispatch()
@@ -21,6 +23,7 @@ const Register = () => {
     const navigation = useNavigate()
     
     const submit = (data: IRegisterCredentials) => {
+        console.log('test')
         dispatch(registerAccount(data))
     }
 
@@ -47,16 +50,19 @@ const Register = () => {
                 <div className="register-form">
                     <div className='logo'>
                         <img src={process.env.PUBLIC_URL + '/Icon.svg'} alt="" />
-                        <p className='logo-text'>Welcome to E-Comm</p>
-                        <p className='logo-subtext'>Sign in</p>
+                        <p className='logo-text'>Let's Get Started</p>
+                        <p className='logo-subtext'>Create a new account</p>
                     </div>
                     <form onSubmit={handleSubmit(submit)}>
-                        <Input preIcon={<PersonOutlineOutlinedIcon/>} type={'text'} isError={!!errors.email} placeholder={'Your Username'} {...register('username')}/>
+                        <Input preIcon={<PersonOutlineOutlinedIcon/>} type={'text'} isError={!!errors.username} placeholder={'Your Username'} {...register('username')}/>
                         <Input preIcon={<EmailOutlinedIcon/>} type={'text'} isError={!!errors.email} placeholder={'Your Email'} {...register('email')}/>
                         <Input preIcon={<LockOutlinedIcon/>} type={'password'} isError={!!errors.password} placeholder={'Password'} {...register('password')}/>
-                        <Input preIcon={<LockOutlinedIcon/>} type={'password'} isError={!!errors.password} placeholder={'Password Againg'} {...register('repassword')}/>
+                        <Input preIcon={<LockOutlinedIcon/>} type={'password'} isError={!!errors.repassword} placeholder={'Password Againg'} {...register('repassword')}/>
                         <Button variant={'filled'} type={'submit'}>Sign in</Button>
                     </form>
+                </div>
+                <div className="register-link">
+                    <span>Have an account? <Link to='/login'>Sign in</Link></span>
                 </div>
             </div>
         </Container>

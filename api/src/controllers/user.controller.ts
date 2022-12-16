@@ -37,7 +37,7 @@ export const createUser = async (
       username,
       email,
       password: encryptedPass,
-      avatar: `https://${AWS_BUCKET}.s3.${AWS_REGION}.amazonaws.com/images/${username}.png`,
+      avatar: 'editable',
       cart: [],
     })
     const createdUser = await userService.create(user)

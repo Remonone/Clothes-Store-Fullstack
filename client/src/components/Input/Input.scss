@@ -8,14 +8,14 @@
     padding: 14px 18px;
     cursor: text;
     &.error{
-        border: 1px solid #ee0000;
+        border: 1px solid $secondary;
         svg{
-            fill: #ee0000;
+            fill: $secondary;
         }
         input{
-            color: #ee0000;
+            color: $secondary;
             &::placeholder{
-                color: #ee0000;
+                color: $secondary;
             }
         }
     }

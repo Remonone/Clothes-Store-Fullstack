@@ -1,0 +1,45 @@
+@import '../../utils/colors.scss';
+
+.register{
+    &-box{
+        max-width: 50%;
+        margin: 0 auto;
+        padding: 60px 0 80px;
+    }
+    &-form{
+        .logo{
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            img{
+                width: 100px;
+            }
+            &-text{
+                font-size: 18px;
+            }
+            &-subtext{
+                font-size: 16px;
+                color: $text-light;
+            }
+        }
+        form{
+            padding-top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .btn{
+            margin-top: 8px;
+        }
+    }
+    &-link{
+        padding-top: 16px;
+        text-align: center;
+        color: $text-light;
+        a{
+            text-decoration: none;
+            font-weight: 700;
+            color: $primary;
+        }
+    }
+}
