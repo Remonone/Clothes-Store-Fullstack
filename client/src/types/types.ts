@@ -15,3 +15,15 @@ export interface User{
     avatar: string
     cart: CartItem[]
 }
+
+export interface IRegisterCredentials{
+    username: string
+    email: string
+    password: string
+    repassword: string
+}
+
+export interface ILoginCredentials {
+    email: string
+    password: string
+}

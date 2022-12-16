@@ -41,7 +41,8 @@ export const createUser = async (
       cart: [],
     })
     const createdUser = await userService.create(user)
-    return res.json(createdUser)
+    const token = getToken({ id: createdUser?._id, email: email })
+    return res.json({ webToken: token })
   } catch (e) {
     if (e instanceof Error && e.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', 400, e))

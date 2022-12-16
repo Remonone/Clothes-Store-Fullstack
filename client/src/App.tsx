@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { authentication } from "./redux/reducers/AccountReducer";
 import Profile from "./pages/Profile/Profile";
+import Register from "./pages/Register/Register";
 
 function App() {
   const auth = useAppSelector(state => state.auth)
@@ -27,6 +28,10 @@ function App() {
     {
       path: '/profile',
       element: <Page element={<Profile/>}/>
+    },
+    {
+      path:'/register',
+      element: <Page element={<Register/>}/>
     }
   ])
   return (

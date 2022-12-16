@@ -4,7 +4,7 @@ import './Button.scss'
 
 interface IButton{
     children?: any
-    variant: "filled" | "empty"
+    variant: "filled" | "outlined" | "empty"
     disable?: boolean
     onClick?: CallableFunction
     type?: 'submit' | 'button' | 'reset'

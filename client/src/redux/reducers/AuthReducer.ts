@@ -1,15 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { ILoginCredentials, IRegisterCredentials } from "../../types/types";
 
 const initialState = {
     token: '',
     isAuthenticated: false
 }
 
-interface ILoginCredentials {
-    email: string
-    password: string
-}
 
 export const login = createAsyncThunk('login', async (loginData:ILoginCredentials) => {
     const {email, password} = loginData
@@ -18,6 +15,15 @@ export const login = createAsyncThunk('login', async (loginData:ILoginCredential
     })
     return response.data.webToken as string
 })
+
+export const register = createAsyncThunk('register', async (registerData: IRegisterCredentials) => {
+    const {username, email, password} = registerData
+    const response = await axios.post('http://localhost:8000/api/v1/users', {
+        username, email, password
+    })
+    return response.data.webToken as string
+})
+
 
 const auth = createSlice({
     name: 'authReducer',
@@ -32,6 +38,12 @@ const auth = createSlice({
                     token: action.payload,
                     isAuthenticated: true
                 };
+            })
+            .addCase(register.fulfilled, (state, action) => {
+                return {
+                    token: action.payload,
+                    isAuthenticated: true
+                }
             })
     },
 })

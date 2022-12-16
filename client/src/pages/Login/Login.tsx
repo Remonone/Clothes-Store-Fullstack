@@ -4,7 +4,8 @@ import Input from '../../components/Input/Input'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import { yupResolver } from '@hookform/resolvers/yup'
-
+import GoogleIcon from '@mui/icons-material/Google';
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 
 import './Login.scss'
 import Button from '../../components/Button/Button'
@@ -12,12 +13,9 @@ import { useForm } from 'react-hook-form'
 import { loginSchema } from '../../schema/schemas'
 import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { login } from '../../redux/reducers/AuthReducer'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { ILoginCredentials } from '../../types/types'
 
-interface ILoginCredentials{
-    email: string
-    password: string
-}
 
 
 const Login = () => {
@@ -61,6 +59,17 @@ const Login = () => {
                             <Input preIcon={<LockOutlinedIcon/>} type={'password'} isError={!!errors.password} placeholder={'Password'} {...register('password')}/>
                             <Button variant={'filled'} type={'submit'}>Sign in</Button>
                         </form>
+                    </div>
+                    <div className="login-different">
+                        <div className="login-different-text"><span>Or</span></div>
+                        <div className="login-alternative">
+                            <Button variant='outlined' preIcon={<GoogleIcon/>}>Login with Google</Button>
+                            <Button variant='outlined' preIcon={<FacebookOutlinedIcon/>}>Login with Facebook</Button>
+                        </div>
+                        <div className="login-different-links">
+                            <p className="login-link"><Link to='/'>Forgot password?</Link></p>
+                            <p className="login-link">Don't have an account? <Link to='/register'>Register</Link></p>
+                        </div>
                     </div>
                 </div>
             </Container>
