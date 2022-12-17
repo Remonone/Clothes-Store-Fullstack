@@ -8,6 +8,9 @@ export type ProductDocument = Document & {
   category: string
   characteristics: object
   description: string[]
+  tags: string[]
+  images: string[]
+  rating: number
 }
 
 const productSchema = new mongoose.Schema({
@@ -41,6 +44,9 @@ const productSchema = new mongoose.Schema({
     type: Object,
     required: false,
   },
+  tags: [String],
+  images: [String],
+  rating: Number,
 })
 
 export default mongoose.model<ProductDocument>('Product', productSchema)

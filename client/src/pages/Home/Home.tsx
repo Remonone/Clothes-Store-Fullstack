@@ -4,17 +4,18 @@ const Home = () => {
   const user = useAppSelector(state => state.accountReducer)
 
   return (
-    <div>
-        {
-          user ? (
-            <>
-              <img src={user.avatar} alt="" />
-              <h2>{user.username}</h2>
-              <p>{user.email}</p>
-            </>
-          ) : (<></>)
-        }
-      </div>
+    <>
+      <section>
+        <div className="main">
+          <div className="image">
+            <img src={`${process.env.PUBLIC_URL}/promotion.png`} alt="" />
+          </div>
+          <div className="information">
+            <p>Super Flash Sale 50% Off</p>
+          </div>
+        </div>
+      </section>
+    </>
   )
 }
 

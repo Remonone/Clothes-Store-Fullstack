@@ -11,6 +11,7 @@ export type UserDocument = Document & {
   password: string
   avatar: string
   cart: CartItem[]
+  favorite: string[]
 }
 
 const cartSchema = new mongoose.Schema({
@@ -22,6 +23,13 @@ const cartSchema = new mongoose.Schema({
   count: {
     type: Number,
     required: true,
+  },
+})
+const favoriteSchema = new mongoose.Schema({
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'Product',
   },
 })
 
@@ -43,6 +51,7 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   cart: [cartSchema],
+  favorite: [favoriteSchema],
 })
 
 export default mongoose.model<UserDocument>('User', userSchema)
