@@ -7,7 +7,8 @@ const initialState: User = {
     username: '',
     email: '',
     avatar: '',
-    cart: []
+    cart: [],
+    favorite: []
 }
 
 export const authentication = createAsyncThunk('authenticate', async (token: string) => {

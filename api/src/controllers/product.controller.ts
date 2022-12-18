@@ -2,6 +2,20 @@ import { Request, Response, NextFunction } from 'express'
 import Product from '../models/Product'
 import productService from '../services/product.service'
 import { BadRequestError } from '../helpers/apiError'
+import awsS3Service from '../aws/aws.s3.service'
+import { AWS_BUCKET, AWS_REGION } from '../util/secrets'
+
+interface Product {
+  name: string
+  price: number
+  availability: 'In stock' | 'Out of stock'
+  category: string
+  characteristics: object
+  description: string[]
+  tags: string[]
+  images: Buffer[]
+  rating: number
+}
 
 // POST -> /products/
 export const createProduct = async (
@@ -10,24 +24,35 @@ export const createProduct = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      name,
-      price,
-      availability,
-      category,
-      characteristics,
-      description,
-    } = req.body
-    const product = new Product({
-      name,
-      price,
-      availability,
-      category,
-      characteristics,
-      description,
+    const product = req.body as Product
+    const imageLinks: string[] = []
+    product.images.forEach((item, index) => {
+      const productName = product.name.replace(/ /g, '_')
+      imageLinks.push(
+        `https://${AWS_BUCKET}.s3.${AWS_REGION}.amazonaws.com/product/${productName}/images/${
+          productName + index
+        }.png`
+      )
     })
-    await productService.create(product)
-    res.status(200).json(product)
+    const newProduct = new Product({
+      name: product.name,
+      price: product.price,
+      availability: product.availability,
+      category: product.category,
+      characteristics: product.characteristics,
+      description: product.description,
+      tags: product.tags,
+      images: imageLinks,
+      rating: product.rating,
+    })
+    const createdProduct = await productService.create(newProduct)
+    product.images.forEach((item, index) => {
+      awsS3Service.aws_put({
+        key: imageLinks[index],
+        body: item,
+      })
+    })
+    return res.status(200).json(createdProduct)
   } catch (e) {
     if (e instanceof Error && e.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', 400, e))
@@ -36,6 +61,7 @@ export const createProduct = async (
     }
   }
 }
+
 // GET -> /products/:id
 export const findById = async (
   req: Request,

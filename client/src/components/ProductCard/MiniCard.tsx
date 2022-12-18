@@ -5,7 +5,7 @@ import { Product } from '../../types/types'
 const MiniCard = (props: {product: Product}) => {
     const discountPrice = props.product.price - (props.product.price / 100 * props.product.discount)
     return (
-        <div>
+        <div className='mini'>
             <div className='card-image'>
                 <img src={props.product.images[0]} alt="" />
             </div>

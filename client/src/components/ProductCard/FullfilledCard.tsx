@@ -1,17 +1,24 @@
 import { Rating } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 import { Product } from '../../types/types'
-import { stringToColor } from '../../utils/colorGenerator'
+import { stringToColor, switchFormat } from '../../utils/colorGenerator'
+
+import './ProductCard.scss'
 
 const FullfilledCard = (props: {product: Product}) => {
     const discountPrice = props.product.price - (props.product.price / 100 * props.product.discount)
   return (
-    <div>
+    <div className='fullfilled'>
         <div className="card-preview">
             <div className="card-tags">
                 {
                     props.product.tags.map(item => {
-                        return (<p style={{background: stringToColor(item)}}>{item}</p>)
+                        const background = stringToColor(item)
+                        console.log(background)
+                        const {r,g,b} = switchFormat(background) 
+                        let color = (r*0.299 + g*0.587 + b*0.114) > 186 ?
+                        '#000000' : '#ffffff'
+                        return (<p style={{background, color}}>{item}</p>)
                     })
                 }
             </div>
@@ -23,6 +30,7 @@ const FullfilledCard = (props: {product: Product}) => {
             <p className="card__title">{props.product.name}</p>
             <Rating
                 defaultValue={props.product.rating}
+                readOnly
                 precision={.5}
             />
             <div className="card-price">
@@ -34,7 +42,7 @@ const FullfilledCard = (props: {product: Product}) => {
                         <p className="card-discount">{props.product.discount}%</p>
                     </>
                     : 
-                        <p className="card-price-usual">{props.product.price}</p>
+                        <p className="card-price-usual">{props.product.price}$</p>
                 }
             </div>
         </div>

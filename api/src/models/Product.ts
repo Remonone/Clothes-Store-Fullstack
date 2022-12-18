@@ -3,7 +3,7 @@ import mongoose, { Document } from 'mongoose'
 export type ProductDocument = Document & {
   name: string
   price: number
-  discount: number
+  discount?: number
   availability: 'In stock' | 'Out of stock'
   category: string
   characteristics: object
@@ -14,10 +14,6 @@ export type ProductDocument = Document & {
 }
 
 const productSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-    index: true,
-  },
   name: {
     type: String,
     required: true,
