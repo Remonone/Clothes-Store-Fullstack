@@ -13,16 +13,25 @@ const findById = async (productId: string): Promise<ProductDocument> => {
   }
   return product
 }
-
-const findAll = async (): Promise<ProductDocument[]> => {
+// TODO: create sold count and at findAll and filterByCategory make sort by sold, price(each direction), name(each direction)
+const findAll = async (
+  offset: number | undefined,
+  limit: number | undefined
+): Promise<ProductDocument[]> => {
   const productList = await Product.find()
+    .skip(offset || 0)
+    .limit(limit || 20)
   return productList
 }
 
 const filterByCategory = async (
-  category: string
+  category: string,
+  offset: number | undefined,
+  limit: number | undefined
 ): Promise<ProductDocument[]> => {
   const products = await Product.find({ category: category })
+    .skip(offset || 0)
+    .limit(limit || 20)
   if (!products) throw new NotFoundError(`Category ${category} was not found`)
   return products
 }
