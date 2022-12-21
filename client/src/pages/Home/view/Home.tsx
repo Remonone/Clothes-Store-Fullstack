@@ -3,8 +3,10 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import PreviewCard from '../../../components/ProductCard/PreviewCard'
+import Search from '../../../components/Search/Search'
 import { Product } from '../../../types/types'
 import BestSellers from '../components/BestSellers'
+import Featured from '../components/Featured'
 
 import './Home.scss'
 
@@ -65,6 +67,45 @@ const Home = () => {
             </div>
           </Container>
         </div>
+      </section>
+      <section>
+        <div className="advantages">
+          <Container>
+            <div className="advantages-wrapper">
+              <div className="advantages-item">
+                <div className="advantages-image">
+                  <img src={`${process.env.PUBLIC_URL}/shipping.svg`} alt="" />
+                </div>
+                <h2 className="advantages__title">FREE SHIPPING</h2>
+                <p className="advantages__descr">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+              </div>
+              <div className="advantages-item">
+                <div className="advantages-image">
+                  <img src={`${process.env.PUBLIC_URL}/refund.svg`} alt="" />
+                </div>
+                <h2 className="advantages__title">100% REFUND</h2>
+                <p className="advantages__descr">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+              </div>
+              <div className="advantages-item">
+                <div className="advantages-image">
+                  <img src={`${process.env.PUBLIC_URL}/support.svg`} alt="" />
+                </div>
+                <h2 className="advantages__title">SUPPORT 24/7</h2>
+                <p className="advantages__descr">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+              </div>
+            </div>
+          </Container>
+        </div>
+      </section>
+      <section>
+        <Container>
+          <Featured/>
+        </Container>
+      </section>
+      <section>
+        <Container>
+          <Search/>
+        </Container>
       </section>
     </>
   )

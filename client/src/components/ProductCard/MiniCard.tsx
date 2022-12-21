@@ -3,7 +3,9 @@ import React from 'react'
 import { Product } from '../../types/types'
 
 const MiniCard = (props: {product: Product}) => {
-    const discountPrice = props.product.price - (props.product.price / 100 * props.product.discount)
+    const currentPrice = props.product.price - 
+    (props.product.discount > 0 ?
+    (props.product.price / 100 * props.product.discount) : 0)
     return (
         <div className='mini'>
             <div className='card-image'>
@@ -13,14 +15,13 @@ const MiniCard = (props: {product: Product}) => {
                 <p className="card__title">{props.product.name}</p>
                 <Rating defaultValue={props.product.rating} precision={.5}/>
                 <div className="card-price">
+                    <p className='card-current-price'>${currentPrice}</p>
                     {
                         props.product.discount > 0 ? 
-                            <>
-                                <p className='card-current-price'>${discountPrice}</p>
+                            <>   
                                 <p className="card-old-price">${props.product.price}</p>
                             </>
-                        :
-                        <p className='card-current-price'>${props.product.price}</p>
+                        : <></>
                     }
                 </div>
             </div>

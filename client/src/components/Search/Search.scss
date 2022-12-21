@@ -1,0 +1,17 @@
+.search{
+    display: flex;
+    justify-content: center;
+    max-width: 60%;
+    margin: 0 auto;
+    padding: 80px 0;
+    .input-box{
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-right: 0;
+        flex: 1;
+    }
+    .btn{
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+}

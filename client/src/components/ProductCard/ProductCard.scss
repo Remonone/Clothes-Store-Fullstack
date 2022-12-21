@@ -132,5 +132,26 @@
 }
 
 .mini{
-
+    display: flex;
+    justify-content: flex-start;
+    gap:15px;
+    .card{
+        &__title{
+            padding-bottom: 10px;
+            font-size: 18px;
+        }
+        &-price{
+            padding-top: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        &-current-price{
+            color: $secondary;
+            font-weight: 500;
+        }
+        &-old-price{
+            color: $text-light;
+            text-decoration: line-through;
+        }
+    }
 }

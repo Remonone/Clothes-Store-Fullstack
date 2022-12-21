@@ -40,6 +40,7 @@
         font-size: 35px;
         font-weight: 600;
         text-align: center;
+        text-transform: uppercase;
     }
     nav{
         display: flex;
@@ -75,6 +76,7 @@
 .performance{
     background: $primary;
     color: white;
+    margin-top: 50px;    
     &-wrapper{
         display: flex;
         justify-content: space-between;
@@ -118,5 +120,50 @@
         img{
             margin-top: -90px;
         }
+    }
+}
+
+.advantages{
+    &-wrapper{
+        display: flex;
+        justify-content: space-between;
+        gap: 250px;
+    }
+    &-item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+    &-image{
+        padding-bottom: 40px;
+        img{
+            height: 66px;
+            width: auto;
+        }
+    }
+    &__title{
+        font-size: 27px;
+    }
+    &__descr{
+        text-align: center;
+        font-size: 18px;
+    }
+}
+
+.featured{
+    padding-top: 50px;
+    &-list{
+        padding-top: 40px;
+        display: flex;
+        justify-content: flex-start;
+        gap:30px;
+    }
+    h2{
+        color: $text;
+        font-size: 35px;
+        font-weight: 600;
+        text-align: center;
+        text-transform: uppercase;
     }
 }
