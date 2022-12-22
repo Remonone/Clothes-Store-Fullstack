@@ -14,7 +14,6 @@ const FullfilledCard = (props: {product: Product}) => {
                 {
                     props.product.tags.map(item => {
                         const background = stringToColor(item)
-                        console.log(background)
                         const {r,g,b} = switchFormat(background) 
                         let color = (r*0.299 + g*0.587 + b*0.114) > 186 ?
                         '#000000' : '#ffffff'

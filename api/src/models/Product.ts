@@ -11,6 +11,9 @@ export type ProductDocument = Document & {
   tags: string[]
   images: string[]
   rating: number
+  sales: number
+  createdOn: string
+  updatedOn: string
 }
 
 const productSchema = new mongoose.Schema({
@@ -26,8 +29,8 @@ const productSchema = new mongoose.Schema({
   discount: {
     type: Number,
     required: false,
-    max: 100,
-    min: 1,
+    max: 99,
+    min: 0,
   },
   availability: {
     type: String,
@@ -43,6 +46,15 @@ const productSchema = new mongoose.Schema({
   tags: [String],
   images: [String],
   rating: Number,
+  sales: Number,
+  createdOn: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedOn: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
 export default mongoose.model<ProductDocument>('Product', productSchema)

@@ -3,7 +3,7 @@ import React, { forwardRef, InputHTMLAttributes } from 'react'
 import './Input.scss'
 
 interface InputParams extends InputHTMLAttributes<HTMLInputElement> {
-    type: 'text' | 'password' | 'number' | 'date'
+    type: 'text' | 'password' | 'number' | 'date' | 'file'
     preIcon?: React.ReactNode
     postIcon?: React.ReactNode
     placeholder?: string

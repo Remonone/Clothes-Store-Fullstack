@@ -10,8 +10,11 @@ export type UserDocument = Document & {
   email: string
   password: string
   avatar: string
+  role: 'Customer' | 'Admin'
   cart: CartItem[]
   favorite: string[]
+  createdOn: Date
+  updatedOn: Date
 }
 
 const cartSchema = new mongoose.Schema({
@@ -50,8 +53,20 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    enum: ['Customer', 'Admin'],
+  },
   cart: [cartSchema],
   favorite: [favoriteSchema],
+  createdOn: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedOn: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
 export default mongoose.model<UserDocument>('User', userSchema)

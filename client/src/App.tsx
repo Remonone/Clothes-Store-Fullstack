@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { authentication } from "./redux/reducers/AccountReducer";
 import Profile from "./pages/Profile/Profile";
 import Register from "./pages/Register/Register";
+import LoadProduct from "./pages/LoadProduct";
 
 function App() {
   const auth = useAppSelector(state => state.auth)
@@ -32,6 +33,10 @@ function App() {
     {
       path:'/register',
       element: <Page element={<Register/>}/>
+    },
+    {
+      path: '/load',
+      element: <Page element={<LoadProduct/>}/>
     }
   ])
   return (

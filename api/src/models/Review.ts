@@ -6,6 +6,8 @@ export type ReviewDocument = Document & {
   body: string
   author: string
   productId: ObjectId
+  createdOn: Date
+  updatedOn: Date
 }
 
 const reviewSchema = new mongoose.Schema({
@@ -21,6 +23,14 @@ const reviewSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: 'Product',
+  },
+  createdOn: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedOn: {
+    type: Date,
+    default: Date.now,
   },
 })
 

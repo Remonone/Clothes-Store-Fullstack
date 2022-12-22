@@ -8,6 +8,7 @@ import { AWS_BUCKET, AWS_REGION } from '../util/secrets'
 interface SearchQuery {
   offset?: number
   limit?: number
+  sort?: any
 }
 interface Product {
   name: string
@@ -18,7 +19,7 @@ interface Product {
   characteristics: object
   description: string[]
   tags: string[]
-  images: Buffer[]
+  images: File[]
   rating: number
 }
 
@@ -32,7 +33,10 @@ export const createProduct = async (
     const product = req.body as Product
     const imageLinks: string[] = []
     const productName = product.name.replace(/ /g, '_')
+    if (!req.files || Object.keys(req.files).length === 0)
+      throw new BadRequestError('No files provided')
     product.images.forEach((item, index) => {
+      //FIX BUG
       imageLinks.push(
         `https://${AWS_BUCKET}.s3.${AWS_REGION}.amazonaws.com/product/${productName}/images/${
           productName + index
@@ -54,8 +58,8 @@ export const createProduct = async (
     const createdProduct = await productService.create(newProduct)
     product.images.forEach((item, index) => {
       awsS3Service.aws_put({
-        key: `product/${productName}/images/${productName + index}.png`,
-        body: item,
+        key: `product/${productName}/images/${item.name}.${item.type}`,
+        body: item.arrayBuffer,
       })
     })
     return res.status(200).json(createdProduct)
@@ -92,8 +96,8 @@ export const findAll = async (
   next: NextFunction
 ) => {
   try {
-    const { offset, limit } = req.query as SearchQuery
-    res.json(await productService.findAll(offset, limit))
+    const { offset, limit, sort } = req.query as SearchQuery
+    res.json(await productService.findAll(offset, limit, sort))
   } catch (e) {
     if (e instanceof Error && e.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', 400, e))
@@ -110,8 +114,10 @@ export const filterByCategory = async (
 ) => {
   try {
     const { category } = req.params
-    const { offset, limit } = req.query as SearchQuery
-    res.json(await productService.filterByCategory(category, offset, limit))
+    const { offset, limit, sort } = req.query as SearchQuery
+    res.json(
+      await productService.filterByCategory(category, offset, limit, sort)
+    )
   } catch (e) {
     if (e instanceof Error && e.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', 400, e))
@@ -149,6 +155,24 @@ export const deleteProduct = async (
     const { id } = req.params
     await productService.deleteProduct(id)
     return res.status(204).end()
+  } catch (e) {
+    if (e instanceof Error && e.name == 'ValidationError') {
+      next(new BadRequestError('Invalid Request', 400, e))
+    } else {
+      next(e)
+    }
+  }
+}
+
+export const getBest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { offset, limit } = req.body as SearchQuery
+    const best = await productService.getBestProducts(offset, limit)
+    return best
   } catch (e) {
     if (e instanceof Error && e.name == 'ValidationError') {
       next(new BadRequestError('Invalid Request', 400, e))

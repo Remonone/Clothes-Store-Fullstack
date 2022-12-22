@@ -13,7 +13,7 @@ const MiniCard = (props: {product: Product}) => {
             </div>
             <div className="card-info">
                 <p className="card__title">{props.product.name}</p>
-                <Rating defaultValue={props.product.rating} precision={.5}/>
+                <Rating defaultValue={props.product.rating} readOnly precision={.5}/>
                 <div className="card-price">
                     <p className='card-current-price'>${currentPrice}</p>
                     {

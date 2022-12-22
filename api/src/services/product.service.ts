@@ -13,25 +13,31 @@ const findById = async (productId: string): Promise<ProductDocument> => {
   }
   return product
 }
-// TODO: create sold count and at findAll and filterByCategory make sort by sold, price(each direction), name(each direction)
+// TODO: create sold count and at findAll and filterByCategory make sort by price(each direction), name(each direction)
 const findAll = async (
   offset: number | undefined,
-  limit: number | undefined
+  limit: number | undefined,
+  sort?: { name?: number; price?: number }
 ): Promise<ProductDocument[]> => {
-  const productList = await Product.find()
+  const productList = await Product.find({}, null, { sort: sort })
     .skip(offset || 0)
     .limit(limit || 20)
+    .select({ sales: 0, updatedOn: 0, createdOn: 0 })
   return productList
 }
 
 const filterByCategory = async (
   category: string,
   offset: number | undefined,
-  limit: number | undefined
+  limit: number | undefined,
+  sort?: Partial<ProductDocument>
 ): Promise<ProductDocument[]> => {
-  const products = await Product.find({ category: category })
+  const products = await Product.find({ category: category }, null, {
+    sort: sort,
+  })
     .skip(offset || 0)
     .limit(limit || 20)
+    .select({ sales: 0, updatedOn: 0, createdOn: 0 })
   if (!products) throw new NotFoundError(`Category ${category} was not found`)
   return products
 }
@@ -57,6 +63,16 @@ const deleteProduct = async (
   return foundProduct
 }
 
+const getBestProducts = async (
+  offset: number | undefined,
+  limit: number | undefined
+): Promise<ProductDocument[] | null> => {
+  const products = await Product.find({}, null, { sort: { sales: -1 } })
+    .skip(offset || 0)
+    .limit(limit || 20)
+  return products
+}
+
 export default {
   create,
   findById,
@@ -64,4 +80,5 @@ export default {
   filterByCategory,
   update,
   deleteProduct,
+  getBestProducts,
 }
